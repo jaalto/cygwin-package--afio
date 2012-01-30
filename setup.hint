@@ -1,0 +1,11 @@
+sdesc: "Archive file manipulation program"
+ldesc: "Afio makes cpio-format archives and is a better replacement for tar.
+Afio manipulates groups of files, copying them within or between
+filesystems and an afio archive. Afio archives are portable as they
+contain only ASCII-formatted header information. Afio deals somewhat
+gracefully with input data corruption: with tar <compress option>,
+you're likely lose the whole archive past the first corruption. Afio
+compresses each file, rather than creating a single big backup. Afio
+supports multi-volume archives during interactive operation."
+category: Archive
+requires: cygwin

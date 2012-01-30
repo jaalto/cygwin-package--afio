@@ -1,0 +1,61 @@
+#! /bin/sh /usr/share/dpatch/dpatch-run
+## 20_manpage_nocompress_ogg.dpatch by Erik Schanze <eriks@debian.org>
+##
+## All lines beginning with `## DP:' are a description of the patch.
+## DP: added .ogg extention to list "will not compressed" (Closes: #280201)
+## DP: removed additional line in afio.1 (Closes: #289107)
+## DP: added additional explaination of option -0 and new option -7
+
+
+@DPATCH@
+diff -urNad afio-2.5/afio.1 /tmp/dpep.sugCQK/afio-2.5/afio.1
+--- afio-2.5/afio.1	2005-01-28 23:45:23.000000000 +0100
++++ /tmp/dpep.sugCQK/afio-2.5/afio.1	2005-01-28 23:52:29.000000000 +0100
+@@ -555,7 +555,7 @@
+ .I  .uc2 .tpz .taz .tgz .rpm .zoo .deb
+ .I  .gif .jpeg .jpg .tif .tiff .png .pdf
+ .I .arj .avi .bgb .cab .cpn .hqx .jar
+-.I .mp3 .mpg .mpq .pic .pkz .psn .sit
++.I .mp3 .mpg .mpq .pic .pkz .psn .sit .ogg
+ and
+ .I .smk
+ 'br END_EXT_LIST
+@@ -639,7 +639,7 @@
+ .BI "-H " promptscript
+ Specify a script to run, in stead of using the normal prompt, before
+ advancing to the next achive volume.  The script will be run with the
+-volume number, archive specification, and  the reason for changing to 
++next volume number, archive specification, and the reason for changing to
+ the next volume as arguments.  The script
+ should exit with 0 for OK and 1 for abort, other exit codes will be
+ treated as fatal errors.  
+@@ -891,7 +891,14 @@
+ of a '\\n'. When used with 
+ .IR "find ... -print0" , 
+ can be used to ensure that any filename can be handled, 
+-even if it contains a newline.
++even if it contains a newline. When used with option
++.B -t
++the output filenames will be separated by nullbytes. If a patternfile is
++used with
++.B -w
++or
++.B -W
++it has also to use '\\0' as delimiter.
+ .TP
+ .BI \-1 "\ warnings-to-ignore"
+ Control if
+@@ -1079,6 +1086,13 @@
+ option is mainly intended as a method for excluding all
+ files in certain subdirectory trees from compression.
+ .TP
++.B -7
++Disable globbing so that it is possible to use
++.B -W
++or
++.B -w
++to specify a list of exact filenames to exclude or extract.
++.TP
+ .B -9
+ Do not round down any
+ .B -s

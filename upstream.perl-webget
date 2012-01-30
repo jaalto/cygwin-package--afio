@@ -1,0 +1,2 @@
+tag1: afio
+  http://packages.debian.org/unstable/afio pregexp:orig.tar.gz file:afio_2.5.orig.tar.gz new: x:

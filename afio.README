@@ -1,0 +1,74 @@
+afio
+------------------------------------------
+
+Archive file manipulation program
+
+Afio makes cpio-format archives and is a better replacement for tar.
+Afio manipulates groups of files, copying them within or between
+filesystems and an afio archive. Afio archives are portable as they
+contain only ASCII-formatted header information. Afio deals somewhat
+gracefully with input data corruption: with tar <compress option>,
+you're likely lose the whole archive past the first corruption. Afio
+compresses each file, rather than creating a single big backup. Afio
+supports multi-volume archives during interactive operation.
+
+Runtime requirements:
+  cygwin
+
+Build requirements:
+  cygwin
+
+Canonical homepage:
+  http://freshmeat.net/projects/afio
+  http://packages.debian.org/afio
+  http://directory.fsf.org/project/afio
+
+Canonical download:
+  See above
+
+Version control repository:
+
+Mailing list:
+
+Forum / Wiki:
+
+IRC channel:
+
+Upstream contact:
+  Maintainer: Koen Holtman <koen@hep.caltech.edu>, <k.holtman@chello.nl>
+  Bugs: Koen Holtman <koen@hep.caltech.edu>, <k.holtman@chello.nl>
+
+License:
+  LGPL
+
+Language:
+  C
+
+------------------------------------------
+
+Build instructions:
+  unpack afio-*-src.tar.bz2
+    if you use setup to install this src package, it will be
+    unpacked under /usr/src automatically
+  cd /usr/src
+  ./afio*.sh all
+
+This will create:
+  installable binary package
+
+------------------------------------------
+
+Files included in the binary distribution:
+
+  <See content of *.tar.gz>
+
+------------------------------------------
+
+Port Notes:
+- Debian patches were applied
+
+----- version 2.5-1 -----
+- Initial release 2008-02-16 Jari Aalto
+
+Cygwin port maintained by: Jari Aalto <jari.aalto@cante.net>
+Copyright (C) 2008 Jari Aalto; Licensed under GPL v2 or later

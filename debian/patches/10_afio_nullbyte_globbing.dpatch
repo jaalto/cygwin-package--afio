@@ -1,0 +1,134 @@
+#! /bin/sh /usr/share/dpatch/dpatch-run
+## 10_afio_nullbyte_globbing.dpatch by Erik Schanze <eriks@debian.org>
+##
+## All lines beginning with `## DP:' are a description of the patch.
+## DP:  brings nullbyte separator for filelists and missing possibility to
+## DP:  disable globbing (Closes: #265879)
+
+@DPATCH@
+diff -urNad afio-2.5/afio.c /tmp/dpep.gwxHEw/afio-2.5/afio.c
+--- afio-2.5/afio.c	2005-01-15 22:05:30.000000000 +0100
++++ /tmp/dpep.gwxHEw/afio-2.5/afio.c	2005-01-20 22:08:48.000000000 +0100
+@@ -309,6 +309,7 @@
+      STATIC Dir *DirP=NULL; /* list of directories with their saved timestamps */
+      STATIC char firstfilename[PATHSIZE]=""; /* for temp storage during -o */
+      STATIC int useoutmodetoc=0; /* used in tocentry() */
++	  STATIC short noglob=0; /* disable globbing */
+ 
+ int main (int ac, char **av)
+ {
+@@ -343,7 +344,7 @@
+    */
+ 
+   while ((c = options (ac, av, 
+-         "aioprtIOVCb:c:de:fghjklmns:uvxXy:Y:zFKZL:R:qAE:G:M:w:W:T:SBD:P:Q:U4JH:0@:N:3:1:92:56:"))
++         "aioprtIOVCb:c:de:fghjklmns:uvxXy:Y:zFKZL:R:qAE:G:M:w:W:T:SBD:P:Q:U4JH:0@:N:3:1:92:56:7"))
+         )
+     {
+       switch (c)
+@@ -437,6 +438,9 @@
+ 	case 'n':
+ 	  ++nflag;
+ 	  break;
++	case '7':
++	  noglob = 1;
++	  break;
+ 	case 's':
+ 	  /* Do a 'dry run' to check all values for syntax errors */
+ 	  aruntil_string = strdup(optarg);
+@@ -4481,8 +4485,12 @@
+     if (ISCONTROL(asb))
+ 	res = printf("//--%s",name);
+     else
+-	res = printf ("%s", name);
+-
++     {
++	if (flag0)
++		res = printf ("%s%c", name, 0);
++	else
++		res = printf ("%s", name);
++     }
+     /* to find out about broken pipe as early as possible */ 
+     if(res > 0) res = fflush(stdout);
+     /* check for broken pipe on stdout, this ends the listing */
+@@ -4542,6 +4550,7 @@
+ #endif /* S_IFLNK */
+     }
+ 
++if (!flag0)
+   putchar ('\n');
+ }
+ 
+diff -urNad afio-2.5/afio.h /tmp/dpep.gwxHEw/afio-2.5/afio.h
+--- afio-2.5/afio.h	2003-12-20 14:59:42.000000000 +0100
++++ /tmp/dpep.gwxHEw/afio-2.5/afio.h	2005-01-20 22:08:48.000000000 +0100
+@@ -530,3 +530,5 @@
+ ulonglong optsize (char *);
+ void update_aruntil(void);
+ extern ulonglong maxsizetocompress;
++extern short noglob;
++extern short flag0;
+diff -urNad afio-2.5/match.c /tmp/dpep.gwxHEw/afio-2.5/match.c
+--- afio-2.5/match.c	2003-04-17 23:04:37.000000000 +0200
++++ /tmp/dpep.gwxHEw/afio-2.5/match.c	2005-01-20 22:08:48.000000000 +0100
+@@ -92,10 +92,34 @@
+ {
+  FILE *infile;
+  char pat[PATHSIZE+1];
+-
++ int c,i;
++ 
+  infile=fopen(fname,"r");
+  if(infile==0) return 0;
+ 
++ if(flag0)
++ {
++     /* also the last entry needs a nullbyte! */ 
++
++     i=0;
++     while((c = fgetc(infile))!=EOF)
++     {
++         if(i > sizeof(pat))
++         fatal(pat,"Path name too long");
++
++         pat[i]=c;
++
++         if(c == '\0')
++         {
++              nameadd(pat,ptype);
++              i=0;
++              continue;
++         }
++         i++;
++     }
++ }
++ else
++ {
+  while(fgets(pat,PATHSIZE,infile)!=NULL)
+    {
+     /* remove \n */
+@@ -110,7 +134,8 @@
+ 
+      nameadd(pat,ptype);
+    }
+-
++ }
++ 
+  fclose(infile);
+  return 1;
+ }
+@@ -180,7 +205,14 @@
+        p=px->p_str;
+        if(ignoreslash && (p[0]=='/')) p++;
+ 
++   if (noglob)
++   {
++       if(strcmp(p,n)==0) return 0;
++   }
++   else
++   {
+        if(fnmatch(p,n,0)==0) return 0;
++   }
+      }
+ 
+   if(!existpospat) return 0; else return -1;

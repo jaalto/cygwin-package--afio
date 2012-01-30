@@ -1,0 +1,38 @@
+#! /bin/sh /usr/share/dpatch/dpatch-run
+## 05_variable_msg_length.dpatch by Erik Schanze <eriks@debian.org>
+##
+## All lines beginning with `## DP:' are a description of the patch.
+## DP: Changes msg to variable length string, because of a possible buffer 
+## DP: overflow (#246044)
+
+@DPATCH@
+diff -urNad afio-2.5/afio.c /tmp/dpep.gD6MYf/afio-2.5/afio.c
+--- afio-2.5/afio.c	2003-12-20 23:16:13.000000000 +0100
++++ /tmp/dpep.gD6MYf/afio-2.5/afio.c	2005-01-20 23:49:01.000000000 +0100
+@@ -2448,11 +2448,16 @@
+      reg char *why;
+ {
+   reg time_t began;
+-  auto char msg[200];
+-  auto char answer[20];
++  char *msg;
++  int msgsize;
++  char answer[20];
+   int ttyfd;
+   char *ttystr;
+ 
++  msgsize = 200 + strlen(myname) * 2 + strlen(arspec);
++  if(promptscript) msgsize += strlen(promptscript);
++  msg = memget (msgsize);
++
+   began = time ((time_t *) NULL);
+   nextclos ();
+   if(!index(ignorewarnings,(int)'M'))
+@@ -2556,6 +2561,7 @@
+       warnings--; /* above warnach call is not an error condition */
+     }
+   timewait += time ((time_t *) NULL) - began;
++  free(msg);
+ }
+ 
+ /*

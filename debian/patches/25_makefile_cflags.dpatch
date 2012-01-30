@@ -1,0 +1,19 @@
+#! /bin/sh /usr/share/dpatch/dpatch-run
+## 25_makefile_cflags.dpatch by  <es@neo.home.local>
+##
+## All lines beginning with `## DP:' are a description of the patch.
+## DP: No description.
+
+@DPATCH@
+diff -urNad afio-2.5~/Makefile afio-2.5/Makefile
+--- afio-2.5~/Makefile	2003-12-21 11:23:51.000000000 +0100
++++ afio-2.5/Makefile	2007-08-11 22:58:52.253644538 +0200
+@@ -71,7 +71,7 @@
+ MW=
+ #MW=-Wtraditional -Wcast-qual -Wcast-align -Wconversion -pedantic -Wlong-long -Wimplicit -Wuninitialized -W -Wshadow -Wsign-compare -Wstrict-prototypes -Wmissing-declarations
+ 
+-CFLAGS1 = -Wall -Wstrict-prototypes -s -O2 -fomit-frame-pointer ${LARGEFILEFLAGS} ${MW}
++CFLAGS1 = -Wall -Wstrict-prototypes $(CFLAGS2) -fomit-frame-pointer ${LARGEFILEFLAGS} ${MW}
+ 
+ CC=gcc
+ 
