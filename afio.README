@@ -59,16 +59,18 @@ This will create:
 ------------------------------------------
 
 Files included in the binary distribution:
-
-  <See content of *.tar.gz>
+  See Cygwin package archive
 
 ------------------------------------------
 
 Port Notes:
 - Debian patches were applied
 
+----- version 2.5.1.20130626+gite266635-1 -----
+- New upstream release 2013-09-11 user
+
 ----- version 2.5-1 -----
 - Initial release 2008-02-16 Jari Aalto
 
-Cygwin port maintained by: Jari Aalto <jari.aalto@cante.net>
-Copyright (C) 2008 Jari Aalto; Licensed under GPL v2 or later
+Cygwin port maintained by: user <jari.aalto@cante.net>
+Copyright (C) 2008-2013 Jari Aalto; Licensed under GPL v2 or later

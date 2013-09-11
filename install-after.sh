@@ -26,7 +26,7 @@ Main()
     if [ "$root"  ] && [ -d $root ]; then
 
         root=$(echo $root | sed 's,/$,,')  # Delete trailing slash
-    	docdir=$(cd $root/usr/share/doc/[a-z]*[0-9] && pwd)
+    	docdir=$(cd $root/usr/share/doc/afio && pwd)
 
     	[ "$docdir" ] || return 0
 
